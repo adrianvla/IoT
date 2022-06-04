@@ -1,5 +1,11 @@
 # IoT
-Like Apple Home Kit, but free and for raspberry-pi. Control everything in your house with one click from your smartphone
+Like Apple Home Kit, but free and for raspberry-pi. Control everything in your house with one click from your smartphone.
+
+Change the function 
+```js
+
+```
+to use whatever gpio you'd like (I2C, ...)
 
 Runs on localhost (for raspberrypi / windows)
 
