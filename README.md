@@ -13,3 +13,5 @@ var passwd = '1234'; // Change 1234 in what you'd like
 
 
 Change also the gps.position file
+
+Uses NGROK if you want to change something or toggle something in your house, when you're not at home
