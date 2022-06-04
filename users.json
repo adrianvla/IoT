@@ -1,20 +1,22 @@
 {
-    "LIST":[
+    "LIST":[ //list of users
         "Adrian",
         "Moris"
     ],
     "DATA":{
+        /* EXAMPLE
         "Adrian":[
-            {
-                "id": "5db4d113-e2da-427c-aa00-6df1abfb3a98",
+            { //device
+                "id": "5db4d113-e2da-427c-aa00-6df1abfb3a98", //device id
                 "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><g data-name='PC'><path d='M408.777 164.635h-74.85a14.281 14.281 0 0 0-14.288 14.288v147.82a14.286 14.286 0 0 0 14.288 14.293h74.85a14.29 14.29 0 0 0 14.288-14.293v-147.82a14.292 14.292 0 0 0-14.288-14.288zm-43.735 156.402h-18.96v-15.522h18.96zm31.564 0h-18.949v-15.522h18.95zM262.976 167.007H110.927a21.99 21.99 0 0 0-21.992 21.986v81.698h196.022v-81.698a21.984 21.984 0 0 0-21.981-21.986zM88.935 290.663a21.992 21.992 0 0 0 21.992 21.981h49.945v34.721h52.154v-34.72h49.95a21.987 21.987 0 0 0 21.98-21.982v-4.445H88.937z'/></g></svg>",
                 "name": "PC",
-                "status": false,
-                "value": 100,
+                "status": false, //on or off
+                "value": 100, //brightness
                 "usecolor": false,
-                "automatic": false
+                "automatic": false //toggles on or off automatically
             }
         ],
+        */
         "Moris":[
             {
                 "id": "7be17a1e-e764-4ffb-a460-af9b777d0240",
