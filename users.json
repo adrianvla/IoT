@@ -1,31 +1,17 @@
 {
-    "LIST":[ //list of users
-        "Adrian",
-        "Moris"
+    "LIST":[
+        'USER1'
     ],
     "DATA":{
-        /* EXAMPLE
-        "Adrian":[
-            { //device
-                "id": "5db4d113-e2da-427c-aa00-6df1abfb3a98", //device id
+        "USER1":[
+            { 
+                "id": "5db4d113-e2da-427c-aa00-6df1abfb3a98",
                 "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><g data-name='PC'><path d='M408.777 164.635h-74.85a14.281 14.281 0 0 0-14.288 14.288v147.82a14.286 14.286 0 0 0 14.288 14.293h74.85a14.29 14.29 0 0 0 14.288-14.293v-147.82a14.292 14.292 0 0 0-14.288-14.288zm-43.735 156.402h-18.96v-15.522h18.96zm31.564 0h-18.949v-15.522h18.95zM262.976 167.007H110.927a21.99 21.99 0 0 0-21.992 21.986v81.698h196.022v-81.698a21.984 21.984 0 0 0-21.981-21.986zM88.935 290.663a21.992 21.992 0 0 0 21.992 21.981h49.945v34.721h52.154v-34.72h49.95a21.987 21.987 0 0 0 21.98-21.982v-4.445H88.937z'/></g></svg>",
                 "name": "PC",
-                "status": false, //on or off
-                "value": 100, //brightness
+                "status": false,
+                "value": 100,
                 "usecolor": false,
-                "automatic": false //toggles on or off automatically
-            }
-        ],
-        */
-        "Moris":[
-            {
-                "id": "7be17a1e-e764-4ffb-a460-af9b777d0240",
-                "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><g data-name='30-Water Cup'><path d='M27 0H5a1 1 0 0 0-1 1v27a1 1 0 0 0 1 1h2.28l.77 2.32A1 1 0 0 0 9 32h14a1 1 0 0 0 .95-.68l.77-2.32H27a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1zm-1 27h-2a1 1 0 0 0-.95.68L22.28 30H9.72l-.33-1H18v-2H6V10h20zm0-19H6V2h20z'/><path d='M10 21h4v2a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-4v-2a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2zm6-2h4v4h-4zm-6-4h4v4h-4zM19 12h2v2h-2zM21 14h2v2h-2z'/></g></svg>",
-                "name": "Water",
-                "status": true,
-                "value": 70,
-                "usecolor": false,
-                "automatic": false
+                "automatic": false 
             }
         ]
     }
