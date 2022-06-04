@@ -33,7 +33,7 @@ Change also the gps.position file
 
 Uses NGROK if you want to change something or toggle something in your house, when you're not at home
 
-Add a user: 
+Add a user (in users.json file) : 
 ```js
 {
     "LIST":[ //list of users
