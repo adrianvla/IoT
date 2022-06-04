@@ -4,6 +4,17 @@ Like Apple Home Kit, but free and for raspberry-pi. Control everything in your h
 Change the function 
 ```js
 
+function ChangePin(iot, val, color) {
+    console.log(iot + ' ' + val + ' ' + color);
+    //iot is the device ID that you get in data.json
+    //val is the brightness
+    //color is the hex color
+    if(color){
+
+    }else{
+
+    }
+}
 ```
 to use whatever gpio you'd like (I2C, ...)
 
