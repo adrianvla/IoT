@@ -10,3 +10,6 @@ If you want to change the password, change it here:
 ```js
 var passwd = '1234'; // Change 1234 in what you'd like
 ```
+
+
+Change also the gps.position file
