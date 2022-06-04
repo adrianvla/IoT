@@ -1,0 +1,5 @@
+authtoken: 1zH9elKRqKzcKwdgvSwl8xHrsx5_39i5nkv12QL1MAx4teCPw
+tunnels:
+  app:
+    proto: http  # exposes an HTTP end point
+    addr: 80   # uses local port 3000

@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>My Home</title>
+</head>
+
+<body>
+
+    <div class="camera-c dn">
+        <div class="camera">
+            <img src="" alt="">
+        </div>
+    </div>
+
+    <div class="main-c">
+        <div class="main">
+            <div class="title">
+                <div class="dv">
+
+                    <div class="devicename"><span class="gm">Good Morning</span>
+                        <div class="cam">
+                            <div class="label-c">
+                                <div class="label"><span>Camera</span></div>
+                            </div>
+                        </div>
+                        <div class="edit">
+                            <div class="label-c">
+                                <div class="label"><span>Edit</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="nav">
+            </div>
+            <div class="cards-c">
+
+
+
+            </div>
+        </div>
+    </div>
+    <!--
+                <div class="onoff">
+                    <label class="switch-c">
+                        <input type="checkbox">
+                        <span class="switch"></span>
+                    </label>
+                </div>-->
+
+
+
+
+
+    <script>/*
+        const socket = io();
+
+        socket.on("cam_img",(arg)=>{
+            console.log(arg)
+        });
+*/
+        var camFlag=false;
+        $('.cam').on('click',function(){
+            camFlag=!camFlag;
+            if(camFlag){
+                $('.camera-c').removeClass('dn');
+
+            }else{
+                $('.camera-c').addClass('dn');
+
+            }
+        });
+        setInterval(function(){
+            if(camFlag){
+                
+                $.post('/securityCamera', JSON.stringify({
+                d: window.location.pathname.replaceAll('/', '').replaceAll('dashboard', '')
+            }), async function (data) {
+                data=JSON.parse(data);
+                
+                $('.camera-c .camera img').attr('src', data.d);
+            });
+            
+            }
+        },1000);
+
+        function setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        function eraseCookie(name) {
+            document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        }
+        var key = getCookie('key').split('');
+        var counter = 0;
+        var recoflag = false;
+        var iot = {};
+        setInterval(async function () {
+            if (!recoflag) {
+
+                var resp = await e(key[counter % key.length]);
+                resp = JSON.parse(resp);
+                if (resp.status == false) {
+                    alert('DESYNC SECURITY ERROR, reconnecting...');
+                    recoflag = true;
+                    window.location.href = '../';
+                }
+                counter++;
+            }
+        }, 2000);
+        var oldiot = {};
+        var users = {};
+        var oldUsers;
+        var currentUser = getCookie('user');
+        setInterval(function () {
+            currentUser = getCookie('user');
+            $.post('/getIot', JSON.stringify({
+                d: window.location.pathname.replaceAll('/', '').replaceAll('dashboard', '')
+            }), async function (data) {
+                oldiot = JSON.parse(JSON.stringify(iot)); //unlink
+                iot = JSON.parse(data);
+
+                if (JSON.stringify(oldiot) != JSON.stringify(iot)) {
+                    //if (true) {
+                    $('.cards-c').text('');
+
+                    iot[selNav].forEach(function (device) {
+                        var putcardyes = true;
+                        if (device.userspecific) {
+                            if (device.userspecific != currentUser) putcardyes = false;
+                        }
+                        if (putcardyes) {
+                            if (device.usecolor) {
+                                genCard(device.id, device.icon, device.name, device.status,
+                                    function (newstate) {
+                                        changeIOT(device.id, newstate, false);
+                                    },
+                                    function (br) {
+                                        changeIOT(device.id, br, true);
+                                    }, device.value, device.color,
+                                    function (col) {
+                                        changeIOTCOL(device.id, col)
+                                    }, device.automatic,
+                                    function (isauto) {
+                                        changeIOTAUTO(device.id, isauto);
+                                    });
+                            } else {
+                                genCard(device.id, device.icon, device.name, device.status,
+                                    function (newstate) {
+                                        changeIOT(device.id, newstate, false);
+                                    },
+                                    function (br) {
+                                        changeIOT(device.id, br, true);
+                                    }, device.value, undefined, undefined, device
+                                    .automatic,
+                                    function (isauto) {
+                                        changeIOTAUTO(device.id, isauto);
+                                    });
+                            }
+                        }
+
+
+                    });
+                }
+            });
+        }, 1500);
+
+        function e(t) {
+            return new Promise(function (resolve, reject) {
+
+                $.post('/ping', JSON.stringify({
+                    d: window.location.pathname.replaceAll('/', '').replaceAll('dashboard', ''),
+                    g: t
+                }), function (data) {
+                    resolve(data);
+                });
+
+            });
+        }
+
+        function changeIOT(iot, change, ll) {
+            if (!ll) {
+                $.post('/iot', JSON.stringify({
+                    d: window.location.pathname.replaceAll('/', '').replaceAll('dashboard', ''),
+                    iot: iot,
+                    change: change
+                }), function (data) {
+                    data = JSON.parse(data);
+                    iot = data.d;
+                });
+            } else {
+                $.post('/iot', JSON.stringify({
+                    d: window.location.pathname.replaceAll('/', '').replaceAll('dashboard', ''),
+                    iot: iot,
+                    change: Number(change),
+                    value: true
+                }), function (data) {
+                    data = JSON.parse(data);
+                    iot = data.d;
+                });
+            }
+
+        }
+
+        function changeIOTCOL(iot, col) {
+            $.post('/iot', JSON.stringify({
+                d: window.location.pathname.replaceAll('/', '').replaceAll('dashboard', ''),
+                iot: iot,
+                change: col,
+                color: true
+            }), function (data) {
+                data = JSON.parse(data);
+                iot = data.d;
+            });
+        }
+
+        function changeIOTAUTO(iot, autostatus) {
+            console.log(iot, autostatus);
+            $.post('/iot', JSON.stringify({
+                d: window.location.pathname.replaceAll('/', '').replaceAll('dashboard', ''),
+                iot: iot,
+                change: autostatus,
+                automated: true
+            }), function (data) {
+                data = JSON.parse(data);
+                iot = data.d;
+            });
+        }
+
+        function genNav(name, onclick) {
+            var el = $("<div class='nav-el'>" + name + "</div>");
+            el.on('click', function () {
+                $('.nav-el').removeClass('sel');
+                $(this).addClass('sel');
+                onclick();
+            });
+            $('.nav').append(el[0]);
+            return el;
+        }
+        var onc = [];
+
+        function genCard(iot, icon, name, status, onclick, chber, val, colval, chcol, automated, autoonchange) {
+            var el;
+            var newClass = '';
+            if (automated) {
+                newClass = 'automatedItem';
+            }
+            if (status) {
+                if (colval) {
+                    el = $(`
+                <div class="cards sel ` + newClass + `" id="` + iot + `-card">
+                    <div class="cards-body">
+                        <div class="iconandauto">
+                            <div class="icon-c-c">
+                                <div class="icon-c">
+                                    <div class="icon">` + icon + `</div>
+                                </div>    
+                            </div>
+                            <div class="automated-c">
+                                <label class="automated">
+                                    <input type="checkbox" checked="checked" id="` + iot + `-auto">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="item-t">
+                            <span>` + name + `</span>
+                            
+                            <div class="color-c">
+                                <input type="color" id="` + iot + `-color" name="favcolor" value="` + String(colval) + `">
+                            </div>
+                        </div>
+                        <div class="onoff">
+                            <div class="slider-c">
+                                <input type="range" min="1" max="100" value="` + String(val) +
+                        `" class="slider" id="` + iot + `-range">
+                            </div>
+                            <div class="on-l" id="` + iot + `-onoff">On</div>
+                            <label class="switch-c">
+                                <input type="checkbox" id="` + iot + `-checkbox">
+                                <span class="switch"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>`)[0];
+                } else {
+                    el = $(`
+                <div class="cards sel ` + newClass + `" id="` + iot + `-card">
+                    <div class="cards-body">
+                        <div class="iconandauto">
+                            <div class="icon-c-c">
+                                <div class="icon-c">
+                                    <div class="icon">` + icon + `</div>
+                                </div>    
+                            </div>
+                            <div class="automated-c">
+                                <label class="automated">
+                                    <input type="checkbox" checked="checked" id="` + iot + `-auto">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="item-t">
+                            <span>` + name + `</span>
+                        </div>
+                        <div class="onoff">
+                            <div class="slider-c">
+                                <input type="range" min="1" max="100" value="` + String(val) +
+                        `" class="slider" id="` + iot + `-range">
+                            </div>
+                            <div class="on-l" id="` + iot + `-onoff">On</div>
+                            <label class="switch-c">
+                                <input type="checkbox" id="` + iot + `-checkbox">
+                                <span class="switch"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>`)[0];
+                }
+
+                $('.cards-c').append(el);
+                $('#' + iot + '-checkbox').prop("checked", true);
+                $('#' + iot + '-auto').prop("checked", automated);
+                $('#' + iot + '-auto').on('click', function () {
+                    autoonchange($('#' + iot + '-auto').prop("checked"));
+                });
+                $(el).on('click', function () {
+                    if (!editMode) {
+
+                        onclick(!$('#' + iot + '-checkbox').prop("checked"));
+                        if ($('#' + iot + '-checkbox').prop("checked")) {
+                            $('#' + iot + '-checkbox').prop("checked", false);
+                            $('#' + iot + '-onoff').text('Off');
+                            $(el).removeClass('sel');
+
+                        } else {
+
+                            $('#' + iot + '-checkbox').prop("checked", true);
+                            $('#' + iot + '-onoff').text('On');
+                            $(el).addClass('sel');
+                        }
+                    }
+
+                });
+                $("#" + iot + '-range').on('mouseup', function () {
+                    var vv = $(this).val();
+                    chber(vv);
+                });
+                if (colval) {
+                    var ch;
+                    $("#" + iot + '-color').on('change', function () {
+                        var ff = this;
+                        if (ch !== undefined) clearTimeout(ch);
+                        ch = setTimeout(function () {
+                            var vv = $(ff).val();
+                            chcol(vv);
+                        }, 500);
+                    });
+                }
+
+            } else {
+                if (colval) {
+                    el = $(`
+                <div class="cards ` + newClass + `" id="` + iot + `-card">
+                    <div class="cards-body">
+                        <div class="iconandauto">
+                            <div class="icon-c-c">
+                                <div class="icon-c">
+                                    <div class="icon">` + icon + `</div>
+                                </div>    
+                            </div>
+                            <div class="automated-c">
+                                <label class="automated">
+                                    <input type="checkbox" checked="checked" id="` + iot + `-auto">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="item-t">
+
+                            <span>` + name + `</span>
+                            
+                            <div class="color-c">
+                                <input type="color" id="` + iot + `-color" name="favcolor" value="` + String(colval) + `">
+                            </div>
+                        </div>
+                        <div class="onoff">
+                            <div class="slider-c">
+                                <input type="range" min="1" max="100" value="` + String(val) +
+                        `" class="slider" id="` + iot + `-range">
+                            </div>
+                            
+                            <div class="on-l" id="` + iot + `-onoff">Off</div>
+                            <label class="switch-c">
+                                <input type="checkbox" id="` + iot + `-checkbox">
+                                <span class="switch"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>`)[0];
+                } else {
+                    el = $(`
+                <div class="cards ` + newClass + `" id="` + iot + `-card">
+                    <div class="cards-body">
+                        <div class="iconandauto">
+                            <div class="icon-c-c">
+                                <div class="icon-c">
+                                    <div class="icon">` + icon + `</div>
+                                </div>    
+                            </div>
+                            <div class="automated-c">
+                                <label class="automated">
+                                    <input type="checkbox" checked="checked" id="` + iot + `-auto">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="item-t">
+                            <span>` + name + `</span>
+                        </div>
+                        <div class="onoff">
+                            <div class="slider-c">
+                                <input type="range" min="1" max="100" value="` + String(val) +
+                        `" class="slider" id="` + iot + `-range">
+                            </div>
+                            <div class="on-l" id="` + iot + `-onoff">Off</div>
+                            <label class="switch-c">
+                                <input type="checkbox" id="` + iot + `-checkbox">
+                                <span class="switch"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>`)[0];
+                }
+
+                $('.cards-c').append(el);
+                $('#' + iot + '-auto').prop("checked", automated);
+                $('#' + iot + '-auto').on('click', function () {
+                    autoonchange($('#' + iot + '-auto').prop("checked"));
+                });
+                $(el).on('click', function () {
+                    if (!editMode) {
+
+                        onclick(!$('#' + iot + '-checkbox').prop("checked"));
+                        if ($('#' + iot + '-checkbox').prop("checked")) {
+                            $('#' + iot + '-checkbox').prop("checked", false);
+                            $('#' + iot + '-onoff').text('Off');
+                            $(el).removeClass('sel');
+
+                        } else {
+
+                            $('#' + iot + '-checkbox').prop("checked", true);
+                            $('#' + iot + '-onoff').text('On');
+                            $(el).addClass('sel');
+                        }
+                    }
+
+                });
+                $("#" + iot + '-range').on('mouseup', function () {
+                    var vv = $(this).val();
+                    chber(vv);
+                });
+                if (colval) {
+                    var ch;
+                    $("#" + iot + '-color').on('change', function () {
+                        var ff = this;
+                        if (ch !== undefined) clearTimeout(ch);
+                        ch = setTimeout(function () {
+                            var vv = $(ff).val();
+                            chcol(vv);
+                        }, 500);
+                    });
+                }
+            }
+        }
+
+
+
+        var firstflag = true;
+        var selNav;
+        var editMode = false;
+        $(document).ready(function () {
+            $.post('/getIot', JSON.stringify({
+                d: window.location.pathname.replaceAll('/', '').replaceAll('dashboard', '')
+            }), function (data) {
+                iot = JSON.parse(data);
+
+                Object.keys(iot).forEach(function (v) {
+                    var el = genNav(v, function () {
+                        $('.cards-c').text('');
+                        selNav = v;
+                        iot[v].forEach(function (device) {
+                            var putcardyes = true;
+                            if (device.userspecific) {
+                                if (device.userspecific != currentUser)
+                                    putcardyes = false;
+                            }
+                            if (putcardyes) {
+                                if (device.usecolor) {
+                                    genCard(device.id, device.icon, device.name,
+                                        device.status,
+                                        function (newstate) {
+                                            changeIOT(device.id, newstate,
+                                                false);
+                                        },
+                                        function (br) {
+                                            changeIOT(device.id, br, true);
+                                        }, device.value, device.color,
+                                        function (col) {
+                                            changeIOTCOL(device.id, col)
+                                        }, device.automatic,
+                                        function (isauto) {
+                                            changeIOTAUTO(device.id,
+                                            isauto);
+                                        });
+                                } else {
+                                    genCard(device.id, device.icon, device.name,
+                                        device.status,
+                                        function (newstate) {
+                                            changeIOT(device.id, newstate,
+                                                false);
+                                        },
+                                        function (br) {
+                                            changeIOT(device.id, br, true);
+                                        }, device.value, undefined,
+                                        undefined, device
+                                        .automatic,
+                                        function (isauto) {
+                                            changeIOTAUTO(device.id,
+                                            isauto);
+                                        });
+                                }
+                            }
+                        });
+                    });
+                    if (firstflag) {
+                        el.trigger('click');
+                        firstflag = false;
+                    }
+                });
+            });
+        });
+
+
+
+
+
+        $('.edit').on('click', function () {
+            editMode = editMode ^ 1;
+            if (editMode) {
+                $('.cards-c').addClass('dn');
+                $('.label-c').css('background', 'var(--accent)');
+            } else {
+                $('.cards-c').removeClass('dn');
+                $('.label-c').css('background', 'var(--bg2)');
+            }
+        });
+    </script>
+</body>
+
+</html>

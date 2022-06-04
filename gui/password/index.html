@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter The Password</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .main {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body {
+            overflow: hidden;
+        }
+
+        .shake {
+            animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+        }
+
+        .input {
+            padding: 10px;
+            border-radius: 20px;
+            background-color: #ccc;
+        }
+
+        .input input {
+            background: #00000000;
+            border: 0;
+            font-family: sans-serif;
+            font-size: 20px;
+        }
+
+        @keyframes shake {
+
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(4px, 0, 0);
+            }
+        }
+
+        .usersel-c{
+            position:absolute;
+            margin: 0;
+            width:100%;
+            height:100%;
+            top:0;
+            left:0;
+            z-index:999;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            background:#2a2a2aa8;
+            backdrop-filter: blur(10px);
+        }
+        .usersel{
+            height:100px;
+            min-width:100px;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .user{
+            width:100px;
+            height:100px;
+            display:flex;
+            opacity:1;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            background:rgba(187, 187, 187, 0.472);
+            margin:10px;
+            border-radius:50%;
+            font-size:20px;
+            font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            cursor:pointer;
+            transition:transform 0.3s cubic-bezier(0.075, 0.82, 0.165, 1), opacity 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+        }
+        .user:hover{
+            transform:scale(1.2);
+        }
+        .dn{
+            display:none !important;
+            opacity:0 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="usersel-c dn">
+        <div class="usersel">
+        </div>
+    </div>
+    <div class="main">
+        <div class="input">
+            <form id='form'><input type="text" placeholder="Enter Password..." id='passwd'>
+            </form>
+        </div>
+    </div>
+
+
+
+    <script>
+        function addUserEl(name,callback){
+            var el = $(`<div class="user" id="`+name+`-id">
+                <div class="name">`+name+`</div>
+            </div>`)[0];
+            $('.usersel-c').append(el);
+            $('.usersel-c').removeClass('dn');
+            $('#'+name+'-id').on('click',callback);
+            return;
+        }
+
+        function setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        function eraseCookie(name) {
+            document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        }
+        if (getCookie('password') != null) {
+            u(getCookie('password'));
+        }
+        $('#form').on('submit', function (e) {
+            var passwd = $('#passwd').val();
+            e.preventDefault();
+            if (passwd) {
+                u(passwd);
+            }
+        });
+        
+        function u(y) {
+            $.post('/auth', JSON.stringify({
+                p: y
+            }), function (data) {
+                var ge = JSON.parse(data);
+                console.log(ge);
+                if (ge.p) {
+                    (async function () {
+                        setCookie('key', ge.k, 10);
+                        setCookie('password', y, 10);
+                        chooseUser(ge.t,ge.users);
+                        //window.location.href = '/dashboard/' + ge.t;
+                    })();
+                } else {
+                    $('.input').addClass('shake');
+                    setTimeout(function () {
+                        $('.input').removeClass('shake');
+                    }, 820);
+                }
+            });
+            $('#passwd').val('');
+        }
+
+
+
+        function chooseUser(sid,users){
+            console.log(users)
+            users.LIST.forEach(element => {
+                addUserEl(element,function(){
+                    setCookie('user', element, 10);
+                    window.location.href = '/dashboard/' + sid;
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>
