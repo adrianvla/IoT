@@ -1,6 +1,7 @@
 # IoT
 Like Apple Home Kit, but free and for raspberry-pi. Control everything in your house with one click from your smartphone.
 
+
 Change the function 
 ```js
 
@@ -70,3 +71,5 @@ Add a user (in users.json file) :
 }
 
 ```
+ more info at https://www.morisinc.net/IoT
+ 
