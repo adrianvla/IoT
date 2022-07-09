@@ -1,6 +1,12 @@
 # IoT
 Like Apple Home Kit, but free and for raspberry-pi. Control everything in your house with one click from your smartphone.
 
+To run it, type
+```bash
+node main.js
+``` 
+while being in the same directory
+
 
 Change the function 
 ```js
