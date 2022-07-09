@@ -7,6 +7,9 @@ node main.js
 ``` 
 while being in the same directory
 
+After that, open your browser and go to http://localhost if you want to access your dashboard. Enter your password (default : 1234).
+If you wish to open it on your phone, go to your ip on your LAN network ( {your computer's name}.local or go to the NGROK link shown in the console).
+
 
 Change the function 
 ```js
