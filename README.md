@@ -82,3 +82,4 @@ Add a user (in users.json file) :
 ```
  more info at https://www.morisinc.net/IoT
  
+ Camera module is a WIP
