@@ -35,7 +35,7 @@ If you download you agree to https://creativecommons.org/licenses/by-nc-sa/4.0/
 If you want to change the password, change it here:
 
 ```js
-var passwd = '1234'; // Change 1234 in what you'd like
+var passwd = '1234'; // Change 1234 to what you'd like
 ```
 
 
