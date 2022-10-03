@@ -1,7 +1,9 @@
 # IoT
 Like Apple Home Kit, but free and for raspberry-pi. Control everything in your house with one click from your smartphone.
-![IMG_1731](https://user-images.githubusercontent.com/86854740/193569451-f5582e12-3db5-499c-8e91-b413b29947fb.png)
-![IMG_1732-1](https://user-images.githubusercontent.com/86854740/193569474-8fdaba9e-8dc8-457b-af41-b9cb0183fb3e.png)
+
+<img src="https://user-images.githubusercontent.com/86854740/193569451-f5582e12-3db5-499c-8e91-b413b29947fb.png" alt="demo" style="width:200px;"/>
+<img src="https://user-images.githubusercontent.com/86854740/193569474-8fdaba9e-8dc8-457b-af41-b9cb0183fb3e.png" alt="demo" style="width:200px;"/>
+
 
 
 To run it, type
